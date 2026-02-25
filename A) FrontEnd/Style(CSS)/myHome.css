@@ -1,0 +1,304 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --gold: #F4D48A;
+    --dark: #1C2E36;
+    --cream: #FAF7F0;
+    --dark2: #162530;
+    --gold-dim: rgba(244,212,138,0.15);
+    --gold-border: rgba(244,212,138,0.3);
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--dark);
+    color: var(--cream);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: default;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: url("../Images/noise.png") repeat;
+    opacity: 0.6;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 3.5rem;
+    background: linear-gradient(to bottom, rgba(28,46,54,0.98), transparent);
+    border-bottom: 1px solid rgba(244,212,138,0.08);
+}
+
+.nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    color: var(--cream);
+    text-decoration: none;
+}
+
+.nav-logo span {
+    color: var(--gold);
+}
+
+.nav-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.btn-ghost {
+    background: transparent;
+    border: 1px solid var(--gold-border);
+    color: var(--cream);
+    padding: 0.55rem 1.4rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.btn-ghost:hover {
+    background: var(--gold-dim);
+    border-color: var(--gold);
+    color: var(--gold);
+}
+
+.btn-primary {
+    background: var(--gold);
+    border: 1px solid var(--gold);
+    color: var(--dark);
+    padding: 0.55rem 1.4rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.btn-primary:hover {
+    background: #e8c070;
+    border-color: #e8c070;
+}
+
+.hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+}
+
+.hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8rem 4rem 4rem 5rem;
+    position: relative;
+    z-index: 2;
+}
+.hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.2rem;
+    animation: fadeUp 0.9s ease both;
+}
+
+.hero-eyebrow-line {
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+}
+
+.hero-eyebrow span {
+    font-size: 0.72rem;
+    letter-spacing: 0.26em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+.hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.2rem, 5vw, 5rem);
+    font-weight: 300;
+    line-height: 1.08;
+    margin-bottom: 1.8rem;
+    animation: fadeUp 0.9s 0.15s ease both;
+}
+
+.hero-title em {
+    font-style: italic;
+    color: var(--gold);
+}
+
+.hero-desc {
+    font-size: 0.92rem;
+    line-height: 1.85;
+    color: rgba(250,247,240,0.65);
+    max-width: 400px;
+    margin-bottom: 3rem;
+    animation: fadeUp 0.9s 0.3s ease both;
+}
+
+.hero-cta-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    animation: fadeUp 0.9s 0.45s ease both;
+}
+
+.btn-hero {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    background: var(--gold);
+    color: var(--dark);
+    padding: 0.9rem 2.2rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-hero:hover {
+    background: #e8c070;
+    transform: translateY(-2px);
+}
+
+.btn-hero-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    background: transparent;
+    color: var(--cream);
+    padding: 0.9rem 2.2rem;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--gold-border);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-hero-outline:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    transform: translateY(-2px);
+}
+
+.hero-stats {
+    display: flex;
+    gap: 2.5rem;
+    margin-top: 3.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(244,212,138,0.12);
+    animation: fadeUp 0.9s 0.6s ease both;
+}
+
+.stat-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(250,247,240,0.45);
+    margin-top: 0.3rem;
+}
+
+.hero-right {
+    position: relative;
+    overflow: hidden;
+}
+
+.collage {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 6px;
+    padding: 80px 3rem 3rem 1.5rem;
+}
+
+.collage-img {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.collage-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.82) saturate(0.85);
+    transition: all 0.6s ease;
+}
+
+.collage-img:hover img {
+    transform: scale(1.06);
+    filter: brightness(0.95) saturate(1);
+}
+
+.collage-img-large {
+    grid-row: span 2;
+}
+
+.collage-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent 60%, rgba(244,212,138,0.07));
+    pointer-events: none;
+}
+
+.collage-img::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 1px solid rgba(244,212,138,0.0);
+    z-index: 2;
+    transition: border-color 0.4s;
+    pointer-events: none;
+}
+
+.collage-img:hover::before {
+    border-color: rgba(244,212,138,0.35);
+}

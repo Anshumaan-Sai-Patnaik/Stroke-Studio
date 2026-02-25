@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StrokeStudio — Original Paintings, Collected.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+    <link rel="stylesheet" href="../Style(CSS)/myHome.css">
+</head>
+<body>
+    <nav>
+        <a class="nav-logo" href="??">Stroke<span>Studio</span></a>
+        <div class="nav-actions">
+            <a class="btn-ghost" id="openSignin">Sign In</a>
+            <a class="btn-primary" id="openRegister">Create Account</a>
+        </div>
+    </nav>
+    <section class="hero">
+        <div class="hero-left">
+            <div class="hero-eyebrow">
+                <div class="hero-eyebrow-line"></div>
+                <span>Original Art</span>
+            </div>
+            <h1 class="hero-title">
+                Where Every Brushstroke<br/><em>Tells a Story</em>
+            </h1>
+            <p class="hero-desc">
+                We connect discerning collectors with independent artists worldwide. Discover, acquire, and treasure one-of-a-kind original paintings — from oil to watercolour, abstract to realism — each authenticated and shipped directly from the artist's studio.
+            </p>
+            <div class="hero-cta-group">
+                <a class="btn-hero" href="??"><i class="fa-solid fa-compass"></i> Explore Gallery</a>
+                <a class="btn-hero-outline" id="openRegisterHero"><i class="fa-regular fa-user"></i> Join as Collector</a>
+            </div>
+            <div class="hero-stats">
+                <div>
+                    <div class="stat-val">75+</div>
+                    <div class="stat-label">Original Paintings</div>
+                </div>
+                <div>
+                    <div class="stat-val">62+</div>
+                    <div class="stat-label">Independent Artists</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-right">
+            <div class="collage">
+                <% for(let i = 0; i < 5; i++) { %>
+                    <% if(i === 0) { %>
+                        <div class="collage-img collage-img-large">
+                            <img src="../<%= recentWorks[i].image.replace('A) FrontEnd/', '') %>.jpg" />
+                            <div class="collage-overlay"></div>
+                        </div>
+                    <% } else { %>
+                        <div class="collage-img">
+                            <img src="../<%= recentWorks[i].image.replace('A) FrontEnd/', '') %>.jpg" />
+                            <div class="collage-overlay"></div>
+                        </div>
+                    <% } %>
+                <% } %>
+            </div>
+        </div>
+    </section>  
+
+</body>
+</html>
