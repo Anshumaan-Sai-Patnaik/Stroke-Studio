@@ -51,19 +51,121 @@
                 <% for(let i = 0; i < 5; i++) { %>
                     <% if(i === 0) { %>
                         <div class="collage-img collage-img-large">
-                            <img src="../<%= recentWorks[i].image.replace('A) FrontEnd/', '') %>.jpg" />
+                            <img src="../<%= allWorks[i].image.replace('A) FrontEnd/', '') %>.jpg" />
                             <div class="collage-overlay"></div>
                         </div>
                     <% } else { %>
                         <div class="collage-img">
-                            <img src="../<%= recentWorks[i].image.replace('A) FrontEnd/', '') %>.jpg" />
+                            <img src="../<%= allWorks[i].image.replace('A) FrontEnd/', '') %>.jpg" />
                             <div class="collage-overlay"></div>
                         </div>
                     <% } %>
                 <% } %>
             </div>
         </div>
-    </section>  
+    </section>
 
+    <div class="marquee-bar">
+        <div class="marquee-track">
+            <span>Contemporary</span><span class="dot">◆</span>
+            <span>Cubism</span><span class="dot">◆</span>
+            <span>Impressionism</span><span class="dot">◆</span>
+            <span>Mannerism</span><span class="dot">◆</span>
+            <span>Modernism</span><span class="dot">◆</span>
+            <span>Pointillism</span><span class="dot">◆</span>
+            <span>Realism</span><span class="dot">◆</span>
+            <span>Surrealism</span><span class="dot">◆</span>
+
+            <span>Contemporary</span><span class="dot">◆</span>
+            <span>Cubism</span><span class="dot">◆</span>
+            <span>Impressionism</span><span class="dot">◆</span>
+            <span>Mannerism</span><span class="dot">◆</span>
+            <span>Modernism</span><span class="dot">◆</span>
+            <span>Pointillism</span><span class="dot">◆</span>
+            <span>Realism</span><span class="dot">◆</span>
+            <span>Surrealism</span><span class="dot">◆</span>
+        </div>
+    </div>
+
+    <section class="features">
+        <div class="features-header">
+            <div>
+                <div class="section-label">
+                    <div class="section-label-line"></div>
+                    <span>Why Us</span>
+                </div>
+                <h2 class="features-title">Art Collecting,<br/><em>Reimagined</em> for the Digital Age</h2>
+            </div>
+            <p class="features-body">
+                We believe great art should be accessible. StrokeStudio bridges the gap between studio and sitting room — offering a seamless, trustworthy marketplace where every piece arrives with a story, a signature, and the soul of its creator.
+            </p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-certificate"></i></div>
+                <h3>Authenticated Originals</h3>
+                <p>Every painting comes with a signed certificate of authenticity. We guarantee 100% original work, directly from the artist.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-palette"></i></div>
+                <h3>Independent Artists</h3>
+                <p>Support creatives directly. Our artists earn fair commissions and full creative credit for every piece sold.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-box-open"></i></div>
+                <h3>Museum-Grade Packaging</h3>
+                <p>Each artwork is carefully packaged with archival materials and fully insured during transit to your door.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fa-solid fa-arrows-rotate"></i></div>
+                <h3>14-Day Easy Returns</h3>
+                <p>Not completely in love? Return within 14 days for a full refund — no questions asked, no restocking fees.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery-section" id="gallery">
+        <div class="gallery-header">
+            <div>
+                <div class="section-label">
+                    <div class="section-label-line"></div>
+                    <span>Featured Works</span>
+                </div>
+                <h2 class="gallery-title">New in the Collection</h2>
+            </div>
+            <a class="btn-ghost" >View All Works <i class="fa-solid fa-arrow-right" style="font-size:0.7rem; margin-left:0.4rem;"></i></a>
+        </div>
+        <div class="gallery-grid">
+            <% for(let i = 0; i < 4; i++) { %>
+                <div class="gallery-item">
+                    <img src="../<%= recentWorks[i].image.replace('A) FrontEnd/', '') %>.jpg"/>
+                    <div class="gallery-item-info">
+                        <div class="gallery-item-title"><%=recentWorks[i].title %></div>
+                        <div class="gallery-item-details"><%=recentWorks[i].price %> · <%=recentWorks[i].medium%> · <%=recentWorks[i].dimensions %>"</div>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </section>
+
+    <div class="cta-section">
+        <div>
+            <div class="cta-tag"><i class="fa-solid fa-star"></i> Become a Collector</div>
+            <h2 class="cta-title">Start Your Collection<br/>with Just One Piece</h2>
+            <p class="cta-sub">Create a free account and get access to exclusive artist drops, early collection previews, and personalised art recommendations curated to your taste.</p>
+        </div>
+        <div class="cta-buttons">
+            <a class="btn-hero" id="openRegisterCTA"><i class="fa-regular fa-user"></i> Create Free Account</a>
+            <a class="btn-hero-outline" id="openSigninCTA"><i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In</a>
+        </div>
+    </div>
+
+    <footer>
+        <div>
+            <div class="footer-logo">Stroke<span>Studio</span></div>
+            <div class="footer-tagline">Original Paintings, Collected.</div>
+        </div>
+        <div class="footer-copy">© 2025 StrokeStudio. All rights reserved.</div>
+    </footer>
 </body>
 </html>

@@ -1,7 +1,7 @@
 const Painting = require('../models/list');
 
 exports.getHome = async (req, res) => {
-    const data_ = await Painting.find().sort({ _id: -1 }).limit(5);
+    const data_ = await Painting.find().sort({ _id: -1 }).limit(4);
     const data = await Painting.aggregate([
         { $sample: { size: 99 } }
     ]);
