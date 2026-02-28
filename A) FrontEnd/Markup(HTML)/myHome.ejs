@@ -11,13 +11,56 @@
     <link rel="stylesheet" href="../Style(CSS)/myHome.css">
 </head>
 <body>
+    <div class="modal-backdrop" id="authModal">
+        <div class="modal">
+            <button class="modal-close" id="closeModal"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-logo">Stroke<span>Studio</span></div>
+            <div class="modal-tagline">Your gateway to original art</div>
+
+            <div class="modal-tabs">
+                <button class="modal-tab active" data-tab="signin">Sign In</button>
+                <button class="modal-tab" data-tab="register">Create Account</button>
+            </div>
+
+            <div class="tab-panel active" id="tab-signin">
+                <div class="form-group form-input-icon">
+                    <label class="form-label" for="email-signin"><i class="fa-regular fa-envelope"></i></label>
+                    <input class="form-input" type="email" id="email-signin" placeholder="your@email.com"/>
+                </div>
+                <div class="form-group form-input-icon">
+                    <label class="form-label" for="pass-signin"><i class="fa-solid fa-lock"></i></label>
+                    <input class="form-input" type="password" id="pass-signin" placeholder="Password"/>
+                </div>
+                <a class="forgot-link" href="??">Forgot password?</a>
+                <button class="btn-form"><i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In to StrokeStudio</button>
+            </div>
+
+            <div class="tab-panel" id="tab-register">
+                <div class="form-group form-input-icon">
+                    <label class="form-label" for="name-reg"><i class="fa-regular fa-user"></i></label>
+                    <input class="form-input" type="text" id="name-reg" placeholder="Full Name"/>
+                </div>
+                <div class="form-group form-input-icon">
+                    <label class="form-label" for="email-reg"><i class="fa-regular fa-envelope"></i></label>
+                    <input class="form-input" type="email" id="email-reg" placeholder="your@email.com"/>
+                </div>
+                <div class="form-group form-input-icon">
+                    <label class="form-label" for="pass-reg"><i class="fa-solid fa-lock"></i></label>
+                    <input class="form-input" type="password" id="pass-reg" placeholder="Create a password"/>
+                </div>
+                <button class="btn-form" style="margin-top:1rem;"><i class="fa-solid fa-palette"></i> Join StrokeStudio</button>
+            </div>
+        </div>
+    </div>
+
     <nav>
-        <a class="nav-logo" href="??">Stroke<span>Studio</span></a>
+        <a class="nav-logo" href="/home">Stroke<span>Studio</span></a>
         <div class="nav-actions">
             <a class="btn-ghost" id="openSignin">Sign In</a>
             <a class="btn-primary" id="openRegister">Create Account</a>
         </div>
     </nav>
+
     <section class="hero">
         <div class="hero-left">
             <div class="hero-eyebrow">
@@ -31,7 +74,7 @@
                 We connect discerning collectors with independent artists worldwide. Discover, acquire, and treasure one-of-a-kind original paintings — from oil to watercolour, abstract to realism — each authenticated and shipped directly from the artist's studio.
             </p>
             <div class="hero-cta-group">
-                <a class="btn-hero" href="??"><i class="fa-solid fa-compass"></i> Explore Gallery</a>
+                <a class="btn-hero" href="/gallery"><i class="fa-solid fa-compass"></i> Explore Gallery</a>
                 <a class="btn-hero-outline" id="openRegisterHero"><i class="fa-regular fa-user"></i> Join as Collector</a>
             </div>
             <div class="hero-stats">
@@ -100,6 +143,7 @@
                 We believe great art should be accessible. StrokeStudio bridges the gap between studio and sitting room — offering a seamless, trustworthy marketplace where every piece arrives with a story, a signature, and the soul of its creator.
             </p>
         </div>
+
         <div class="features-grid">
             <div class="feature-card">
                 <div class="feature-icon"><i class="fa-solid fa-certificate"></i></div>
@@ -133,8 +177,9 @@
                 </div>
                 <h2 class="gallery-title">New in the Collection</h2>
             </div>
-            <a class="btn-ghost" >View All Works <i class="fa-solid fa-arrow-right" style="font-size:0.7rem; margin-left:0.4rem;"></i></a>
+            <a class="btn-ghost" href="/gallery">View All Works <i class="fa-solid fa-arrow-right" style="font-size:0.7rem; margin-left:0.4rem;"></i></a>
         </div>
+
         <div class="gallery-grid">
             <% for(let i = 0; i < 4; i++) { %>
                 <div class="gallery-item">
@@ -154,6 +199,7 @@
             <h2 class="cta-title">Start Your Collection<br/>with Just One Piece</h2>
             <p class="cta-sub">Create a free account and get access to exclusive artist drops, early collection previews, and personalised art recommendations curated to your taste.</p>
         </div>
+
         <div class="cta-buttons">
             <a class="btn-hero" id="openRegisterCTA"><i class="fa-regular fa-user"></i> Create Free Account</a>
             <a class="btn-hero-outline" id="openSigninCTA"><i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In</a>
@@ -165,7 +211,10 @@
             <div class="footer-logo">Stroke<span>Studio</span></div>
             <div class="footer-tagline">Original Paintings, Collected.</div>
         </div>
+
         <div class="footer-copy">© 2025 StrokeStudio. All rights reserved.</div>
     </footer>
+
+    <script src="../Script(JS)/myHome.js"></script>
 </body>
 </html>
