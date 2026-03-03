@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StrokeStudio — Original Paintings, Collected.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+    <link rel="stylesheet" href="../Style(CSS)/myGallery.css">
+</head>
+<body>
+    <div class="modal-backdrop" id="authModal">
+        <div class="modal">
+            <button class="modal-close" id="closeModal"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-logo">Stroke<span>Studio</span></div>
+            <div class="modal-tagline">Your gateway to original art</div>
+            <div class="modal-tabs">
+                <button class="modal-tab active" data-tab="signin">Sign In</button>
+                <button class="modal-tab" data-tab="register">Create Account</button>
+            </div>
+            <div class="tab-panel active" id="tab-signin">
+                <div class="form-group form-input-icon">
+                    <label class="form-label" for="email-signin"><i class="fa-regular fa-envelope"></i></label>
+                    <input class="form-input" type="email" id="email-signin" placeholder="your@email.com"/>
+                </div>
+                <div class="form-group form-input-icon">
+                    <label class="form-label" for="pass-signin"><i class="fa-solid fa-lock"></i></label>
+                    <input class="form-input" type="password" id="pass-signin" placeholder="Password"/>
+                </div>
+                <a class="forgot-link" href="??">Forgot password?</a>
+                <button class="btn-form"><i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In to StrokeStudio</button>
+            </div>
+            <div class="tab-panel" id="tab-register">
+                <div class="form-group form-input-icon">
+                    <label class="form-label" for="name-reg"><i class="fa-regular fa-user"></i></label>
+                    <input class="form-input" type="text" id="name-reg" placeholder="Full Name"/>
+                </div>
+                <div class="form-group form-input-icon">
+                    <label class="form-label" for="email-reg"><i class="fa-regular fa-envelope"></i></label>
+                    <input class="form-input" type="email" id="email-reg" placeholder="your@email.com"/>
+                </div>
+                <div class="form-group form-input-icon">
+                    <label class="form-label" for="pass-reg"><i class="fa-solid fa-lock"></i></label>
+                    <input class="form-input" type="password" id="pass-reg" placeholder="Create a password"/>
+                </div>
+                <button class="btn-form" style="margin-top:1rem;"><i class="fa-solid fa-palette"></i> Join StrokeStudio</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="detail-backdrop" id="detailModal">
+        <div class="detail-modal">
+            <button class="detail-close" id="closeDetail"><i class="fa-solid fa-xmark"></i></button>
+
+            <div class="detail-img-wrap">
+                <img id="detailImg" src=""/>
+                <div class="detail-img-badge" id="detailMediumBadge"></div>
+            </div>
+
+            <div class="detail-info">
+                <div>
+                    <div class="detail-eyebrow" id="detailStyle"></div>
+                    <h2 class="detail-title" id="detailTitle"></h2>
+                    <div class="detail-artist">By <span id="detailArtist"></span> &nbsp;·&nbsp; <span id="detailYear"></span></div>
+                    <div class="detail-meta">
+                        <div class="detail-meta-item">
+                            <div class="detail-meta-label">Medium</div>
+                            <div class="detail-meta-val" id="detailMetaMedium"></div>
+                        </div>
+                        <div class="detail-meta-item">
+                            <div class="detail-meta-label">Style</div>
+                            <div class="detail-meta-val" id="detailMetaStyle"></div>
+                        </div>
+                        <div class="detail-meta-item">
+                            <div class="detail-meta-label">Dimensions</div>
+                            <div class="detail-meta-val" id="detailMetaDimensions"></div>
+                        </div>
+                        <div class="detail-meta-item">
+                            <div class="detail-meta-label">Year</div>
+                            <div class="detail-meta-val" id="detailMetaYear"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav>
+        <a class="nav-logo" href="/home">Stroke<span>Studio</span></a>
+
+        <div class="nav-center">
+            <div class="nav-search-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input class="nav-search" type="text" placeholder="Search by title, artist or style" id="searchInput"/>
+            </div>
+            <div class="nav-search-divider"></div>
+            <button class="nav-search-btn" id="searchBtn">
+                <i class="fa-solid fa-arrow-right"></i> Search
+            </button>
+        </div>
+
+        <div class="nav-actions">
+            <a class="btn-ghost" id="openSignin"><i class="fa-solid fa-arrow-right-to-bracket"></i> <span>Sign In</span></a>
+            <a class="btn-primary" id="openRegister"><i class="fa-regular fa-user"></i> <span>Create Account</span></a>
+        </div>
+
+        <div class="nav-actions-icons">
+            <button class="nav-icon-btn" id="mobileSearchToggle">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+            <a class="nav-icon-btn" id="mobileSignin">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            </a>
+            <a class="nav-icon-btn primary" id="mobileRegister">
+                <i class="fa-regular fa-user"></i>
+            </a>
+        </div>
+
+        <div class="nav-search-overlay" id="mobileSearchOverlay">
+            <div class="mobile-search-bar">
+                <div class="nav-search-wrap">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input class="nav-search" type="text" placeholder="Search paintings, artists or styles" id="searchInputMobile"/>
+                </div>
+                <div class="nav-search-divider"></div>
+                <button class="nav-search-btn" id="searchBtnMobile">
+                    <i class="fa-solid fa-arrow-right"></i> Search
+                </button>
+            </div>
+            <button class="overlay-close-btn" id="mobileSearchClose">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <div class="page-header-left">
+            <div class="page-eyebrow">
+                <div class="page-eyebrow-line"></div>
+                <span>The Collection</span>
+            </div>
+            <h1 class="page-title">All <em>Original</em> Works</h1>
+            <div class="page-count" id="pageCount"></div>
+        </div>
+    </div>
+    
+    <div class="page-divider"></div>
+
+    <div class="gallery-wrapper">
+        <div class="masonry-grid" id="masonryGrid">
+            <% for(let i = 0; i < allWorks.length; i++) { %>
+            <div
+                class="gallery-item<%= i >= 12 ? ' hidden' : '' %>"
+                data-index="<%= i %>"
+                data-title="<%= allWorks[i].title %>"
+                data-artist="<%= allWorks[i].artist || 'Unknown Artist' %>"
+                data-year="<%= allWorks[i].year || '' %>"
+                data-medium="<%= allWorks[i].medium %>"
+                data-style="<%= allWorks[i].style || '' %>"
+                data-dimensions="<%= allWorks[i].dimensions %>"
+                data-img="../<%= allWorks[i].image.replace('A) FrontEnd/', '') %>.jpg"
+            >
+                <img src="../<%= allWorks[i].image.replace('A) FrontEnd/', '') %>.jpg" loading="lazy"/>
+                <div class="gallery-item-eye"><i class="fa-solid fa-eye"></i></div>
+                <div class="gallery-item-info">
+                    <div class="gallery-item-title"><%= allWorks[i].title %></div>
+                    <div class="gallery-item-details"><%= allWorks[i].medium %> · <span class="dimensions"><%= allWorks[i].dimensions %></span></div>
+                </div>
+            </div>
+            <% } %>
+        </div>
+    </div>
+
+    <div class="show-more-wrap">
+        <div class="progress-bar-track">
+            <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+        </div>
+        <div class="progress-label" id="progressLabel"></div>
+
+        <button class="btn-show-more" id="showMoreBtn">
+            <i class="fa-solid fa-chevron-down"></i> Load More Paintings
+        </button>
+    </div>
+    
+    <footer>
+        <div>
+            <div class="footer-logo">Stroke<span>Studio</span></div>
+            <div class="footer-tagline">Original Paintings, Collected.</div>
+        </div>
+
+        <div class="footer-copy">© 2025 StrokeStudio. All rights reserved.</div>
+    </footer>
+
+    <script src="../Script(JS)/myGallery.js"></script>
+</body>
+</html>
