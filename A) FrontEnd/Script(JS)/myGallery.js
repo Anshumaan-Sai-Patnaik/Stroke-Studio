@@ -181,3 +181,29 @@ document.getElementById('showMoreBtn').addEventListener('click', () => {
 
 
 updateUI();
+
+
+const form = document.getElementById("tab-signin");
+
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const email = document.getElementById("email-signin").value;
+    const password = document.getElementById("pass-signin").value;
+
+    const response = await fetch("http://localhost:3000/user/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, password })
+    });
+
+    const data = await response.json();
+
+    if (!data.success) {
+        document.getElementById("login-error").innerText = data.message;
+    } else {
+        window.location.href = `http://localhost:3000/user/${data.user.userID}`;
+    }
+});
