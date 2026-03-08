@@ -19,6 +19,12 @@ exports.runUser = async (req, res) => {
     }
 }
 
+exports.quitUser = async (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('http://localhost:3000/home');
+    });
+}
+
 exports.getUser = async (req, res) => {
     let {id} = req.params;
     let user = req.session.user;

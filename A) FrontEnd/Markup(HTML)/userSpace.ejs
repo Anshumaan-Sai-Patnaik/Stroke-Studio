@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>StrokeStudio — My Collection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+    <link rel="stylesheet" href="../Style(CSS)/userSpace.css">
+</head>
+<body>
+    <div class="acct-backdrop" id="signOutModal">
+        <div class="acct-modal">
+            <div class="acct-modal-header">
+                <div class="acct-modal-icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
+                <div class="acct-modal-title-wrap">
+                    <div class="acct-modal-eyebrow">Session</div>
+                    <div class="acct-modal-title">Sign Out</div>
+                </div>
+                <button class="acct-close" data-close="signOutModal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="signout-body">
+                <p>You're signed in as <strong><%= userInfo.username %></strong>.</p>
+                <p style="margin-top:0.6rem;">Signing out will end your session. Your cart and wishlist are saved — they'll be right here when you return.</p>
+            </div>
+            <div class="acct-modal-footer">
+                <button class="acct-btn acct-btn-ghost" data-close="signOutModal">Stay Signed In</button>
+                <a class="acct-btn acct-btn-gold" href="http://localhost:3000/user/signout" style="text-decoration:none;">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> Yes, Sign Out
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <nav>
+        <a class="nav-logo" href="/home">Stroke<span>Studio</span></a>
+        <div class="nav-actions">
+            <span class="nav-user-name">Welcome, <strong><%= userInfo.username %></strong></span>
+            <button class="nav-cart-btn" id="navCartBtn" title="View Cart">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span class="nav-cart-badge" id="cartBadge">0</span>
+            </button>
+            <a class="btn-signout" id="openSignOutNav"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out</a>
+        </div>
+        <div class="nav-actions-icons">
+            <button class="nav-cart-btn" id="mobileCartToggle" title="Cart">
+                <i class="fa-solid fa-bag-shopping"></i>
+                <span class="nav-cart-badge" id="cartBadgeMobile">0</span>
+            </button>
+            <button class="nav-icon-btn" id="openSignOutMobile" title="Sign Out">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            </button>
+        </div>
+    </nav>
+
+    <script src="../Script(JS)/userSpace.js"></script>
+</body>
+</html>
