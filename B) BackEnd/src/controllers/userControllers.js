@@ -19,6 +19,12 @@ exports.runUser = async (req, res) => {
     }
 }
 
+exports.quitUser = async (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('http://localhost:3000/home');
+    });
+}
+
 exports.getUser = async (req, res) => {
     let {id} = req.params;
     let user = { ...req.session.user };
@@ -63,8 +69,10 @@ exports.updateUser = async (req, res) => {
     res.json({ ok: true });
 };
 
-exports.quitUser = async (req, res) => {
+exports.deleteUser = async (req, res) => {
+    let id = req.session.user.userID;
+    await User.deleteOne({ userID: id });
     req.session.destroy(() => {
-        res.redirect('http://localhost:3000/home');
+        res.json({ ok: true });
     });
 }

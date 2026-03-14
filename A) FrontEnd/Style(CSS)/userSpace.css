@@ -322,6 +322,10 @@ nav {
     scrollbar-color: rgba(244,212,138,0.15) transparent;
 }
 
+.acct-modal.danger {
+    border-color: rgba(220,70,70,0.25);
+}
+
 .acct-modal::-webkit-scrollbar {
     width: 3px;
 }
@@ -353,6 +357,11 @@ nav {
     color: var(--gold);
 }
 
+.acct-modal.danger .acct-modal-icon {
+    border-color: rgba(220,70,70,0.3);
+    color: rgba(220,100,100,0.85);
+}
+
 .acct-modal-title-wrap {
     flex: 1;
 }
@@ -362,6 +371,10 @@ nav {
     text-transform: uppercase;
     color: rgba(244,212,138,0.45);
     margin-bottom: 0.3rem;
+}
+
+.acct-modal.danger .acct-modal-eyebrow {
+    color: rgba(220,100,100,0.5);
 }
 
 .acct-modal-title {
@@ -397,6 +410,60 @@ nav {
 
 .signout-body strong {
     color: var(--cream);
+    font-weight: 400;
+}
+
+.danger-info {
+    background: rgba(220,70,70,0.06);
+    border: 1px solid rgba(220,70,70,0.15);
+    padding: 1rem 1.2rem;
+    margin-bottom: 1.4rem;
+}
+
+.danger-info p {
+    font-size: 0.78rem;
+    line-height: 1.6;
+    color: rgba(250,247,240,0.55);
+    letter-spacing: 0.02em;
+}
+
+.danger-info strong {
+    color: rgba(220,120,120,0.85);
+    font-weight: 400;
+}
+
+.danger-confirm-row {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 1.4rem;
+}
+
+.danger-confirm-row input {
+    width: 15px;
+    height: 15px;
+    accent-color: rgba(220,80,80,0.8);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.danger-confirm-row label {
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: rgba(250,247,240,0.45);
+    cursor: pointer;
+    line-height: 1.5;
+}
+
+.danger-type-label {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    color: rgba(250,247,240,0.35);
+    margin-bottom: 0.45rem;
+}
+
+.danger-type-label strong {
+    color: rgba(220,120,120,0.7);
     font-weight: 400;
 }
 
@@ -718,6 +785,20 @@ nav {
 .pw-new-section.unlocked .pw-new-fields {
     display: flex;
     flex-direction: column;
+}
+
+.acct-btn-danger {
+    background: rgba(200,55,55,0.85); color: #fff;
+}
+
+.acct-btn-danger:hover {
+    background: rgba(200,55,55,1);
+}
+
+.acct-btn-danger:disabled {
+    background: rgba(200,55,55,0.25);
+    color: rgba(255,255,255,0.3);
+    cursor: default;
 }
 
 

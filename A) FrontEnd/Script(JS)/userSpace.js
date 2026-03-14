@@ -168,3 +168,48 @@ document.getElementById('saveProfileBtn').addEventListener('click', async () => 
         btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Changes';
     }
 });
+
+document.getElementById('openDeleteAccount').addEventListener('click',  () => openModal('deleteAccountModal'));
+document.getElementById('deleteAccountModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('deleteAccountModal')) closeModal('deleteAccountModal');
+});
+
+const USERNAME = document.querySelector('.profile-name').textContent;
+
+function checkDeleteReady() {
+    const checked = document.getElementById('deleteConfirmCheck').checked;
+    const typed   = document.getElementById('deleteConfirmInput').value.trim();
+    const btn     = document.getElementById('confirmDeleteBtn');
+    btn.disabled  = !(checked && typed === USERNAME);
+}
+
+document.getElementById('deleteConfirmCheck').addEventListener('change', checkDeleteReady);
+document.getElementById('deleteConfirmInput').addEventListener('input',  checkDeleteReady);
+
+document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+    document.getElementById('cancelDelete').style.display = 'none';
+    const btn = document.getElementById('confirmDeleteBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Deleting…';
+    const start = Date.now();
+
+    try {
+        const res = await fetch(`/user/${userInfo.userID}/delete`, {
+            method: 'DELETE'
+        });
+
+        const elapsed = Date.now() - start;
+        if (elapsed < 500) {
+            const delay = new Promise(resolve => {
+                setTimeout(resolve, 500 - elapsed);
+            });
+            await delay;
+        }
+
+        if (res.ok) window.location.href = 'http://localhost:3000/home';
+    } catch (err) {
+        document.getElementById('cancelDelete').style.display = '';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-trash-can"></i> Delete My Account';
+    }
+});
