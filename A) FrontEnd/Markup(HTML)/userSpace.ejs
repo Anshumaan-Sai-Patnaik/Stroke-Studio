@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="../Style(CSS)/userSpace.css">
 </head>
 <body>
-    <div class="acct-backdrop" id="signOutModal">
-        <div class="acct-modal">
+    <div class="acct-backdrop" id="signOutModal" style="align-items:center; padding:1.5rem;">
+        <div class="acct-modal" style="max-height:none; overflow-y:visible; align-self:auto;">
             <div class="acct-modal-header">
                 <div class="acct-modal-icon"><i class="fa-solid fa-arrow-right-from-bracket"></i></div>
                 <div class="acct-modal-title-wrap">
@@ -25,11 +25,90 @@
                 <p>You're signed in as <strong><%= userInfo.username %></strong>.</p>
                 <p style="margin-top:0.6rem;">Signing out will end your session. Your cart and wishlist are saved — they'll be right here when you return.</p>
             </div>
-            <div class="acct-modal-footer">
+            <div class="acct-modal-footer" style="position:static;">
                 <button class="acct-btn acct-btn-ghost" data-close="signOutModal">Stay Signed In</button>
                 <a class="acct-btn acct-btn-gold" href="http://localhost:3000/user/signout" style="text-decoration:none;">
                     <i class="fa-solid fa-arrow-right-from-bracket"></i> Yes, Sign Out
                 </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="acct-backdrop" id="editProfileModal">
+        <div class="acct-modal">
+            <div class="acct-modal-header">
+                <div class="acct-modal-icon"><i class="fa-regular fa-pen-to-square"></i></div>
+                <div class="acct-modal-title-wrap">
+                    <div class="acct-modal-eyebrow">Account Settings</div>
+                    <div class="acct-modal-title">Edit Profile</div>
+                </div>
+                <button class="acct-close" data-close="editProfileModal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="acct-modal-body">
+                <div class="acct-feedback" id="editFeedback"></div>
+                <div class="acct-avatar-row">
+                    <div class="acct-avatar-preview" id="editAvatarPreview">
+                        <img src="/<%= userInfo.image.replace('Uploads/', '') %>.jpg">
+                    </div>
+                    <div class="acct-avatar-meta">
+                        <div class="acct-avatar-name">Profile photo</div>
+                        <label class="acct-upload-btn" for="avatarFileInput">
+                            <i class="fa-solid fa-arrow-up-from-bracket"></i> Upload New
+                        </label>
+                        <input type="file" id="avatarFileInput" accept="image/*" style="display:none;"/>
+                    </div>
+                </div>
+                <div class="ep-info-grid">
+                    <div class="ep-info-row">
+                        <span class="ep-info-label">User ID</span>
+                        <span class="ep-info-value"><%= userInfo.userID %></span>
+                    </div>
+                    <div class="ep-info-row">
+                        <span class="ep-info-label">Email</span>
+                        <span class="ep-info-value"><%= userInfo.emailID %></span>
+                    </div>
+                    <div class="ep-info-row ep-editable-row">
+                        <span class="ep-info-label">Username</span>
+                        <input class="ep-inline-input" type="text" name="newUsername" id="editUsername" value="<%= userInfo.username %>" placeholder="Enter username" autocomplete="off"/>
+                    </div>
+                </div>
+                <div class="acct-divider"></div>
+                <div class="acct-section-label">Change Password</div>
+                <div class="acct-field">
+                    <label class="acct-label" for="editCurrentPw">Current Password</label>
+                    <div class="pw-input-wrap">
+                        <input class="acct-input" type="password" id="editCurrentPw" placeholder="Enter your current password"/>
+                        <button class="pw-verify-btn" id="verifyCurrentPwBtn" type="button">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                    <div class="acct-input-hint" id="currentPwHint"></div>
+                </div>
+                <div class="pw-new-section locked" id="pwNewSection">
+                    <div class="pw-locked-msg" id="pwLockedMsg">
+                        <i class="fa-solid fa-lock"></i>
+                        Verify your current password above to unlock
+                    </div>
+                    <div class="pw-new-fields" id="pwNewFields">
+                        <div class="acct-field">
+                            <label class="acct-label" for="editNewPw">New Password</label>
+                            <input class="acct-input" type="password" name="newPassword" id="editNewPw" placeholder="New password" disabled/>
+                        </div>
+                        <div class="acct-field">
+                            <label class="acct-label" for="editConfirmPw">Confirm New Password</label>
+                            <input class="acct-input" type="password" id="editConfirmPw" placeholder="Confirm new password" disabled/>
+                            <div class="acct-input-hint" id="pwMatchHint"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="acct-modal-footer">
+                <button class="acct-btn acct-btn-ghost" id="cancelSave" data-close="editProfileModal">Cancel</button>
+                <button class="acct-btn acct-btn-gold" id="saveProfileBtn">
+                    <i class="fa-solid fa-check"></i> Save Changes
+                </button>
             </div>
         </div>
     </div>
@@ -55,6 +134,30 @@
         </div>
     </nav>
 
+    <div class="page-wrap">
+        <aside class="sidebar">
+            <div class="profile-card">
+                <div class="profile-pic">
+                    <div class="profile-avatar">
+                        <img src="/<%= userInfo.image.replace('Uploads/', '') %>.jpg">
+                    </div>
+                </div>
+                <div class="profile-name"><%= userInfo.username %></div>
+                <div class="profile-id">ID · <%= userInfo.userID %></div>
+                <div class="profile-email"><%= userInfo.emailID %></div>
+                <div class="profile-actions">
+                    <button class="profile-action-btn" id="openEditProfile">
+                        <i class="fa-regular fa-pen-to-square"></i> Edit
+                    </button>
+                    <button class="profile-action-btn danger" id="openDeleteAccount">
+                        <i class="fa-solid fa-trash-can"></i> Delete
+                    </button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script> const userInfo = <%- JSON.stringify(userInfo) %>; </script>
     <script src="../Script(JS)/userSpace.js"></script>
 </body>
 </html>

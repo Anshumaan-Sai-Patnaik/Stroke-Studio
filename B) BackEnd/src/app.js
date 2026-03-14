@@ -11,6 +11,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname,'..', '..', 'A) FrontEnd', 'Markup(HTML)'));
 
 app.use(express.static(path.join(__dirname,'..','..','A) FrontEnd')));
+app.use(express.static(path.join(__dirname,'..','..','Uploads')));
 
 app.use(session({
     secret: "secret-key",

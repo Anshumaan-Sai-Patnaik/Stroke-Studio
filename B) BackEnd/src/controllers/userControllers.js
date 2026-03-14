@@ -19,19 +19,14 @@ exports.runUser = async (req, res) => {
     }
 }
 
-exports.quitUser = async (req, res) => {
-    req.session.destroy(() => {
-        res.redirect('http://localhost:3000/home');
-    });
-}
-
 exports.getUser = async (req, res) => {
     let {id} = req.params;
-    let user = req.session.user;
+    let user = { ...req.session.user };
     if(!user || user.userID != id) {
         res.redirect('http://localhost:3000/home');
     }
     else{
+        delete user.password;
         const data_ = user;
         const data = await Painting.aggregate([
             { $sample: { size: 99 } }
@@ -42,3 +37,34 @@ exports.getUser = async (req, res) => {
         });
     }
 };
+
+exports.updateUser = async (req, res) => {
+    if (req.body.checkPassword) {
+        if (req.body.checkPassword === req.session.user.password) 
+            return res.json({ message: true });
+        else {
+            return res.json({ message: false });
+        }
+
+    }
+
+    let id = req.session.user.userID;
+    const updateFields = {
+        username: req.body.username
+    };
+    if (req.body.newPassword) {
+        updateFields.password = req.body.newPassword;
+        req.session.user.password = req.body.newPassword;
+    }
+    await User.updateOne(
+        { userID: id },
+        updateFields
+    );
+    res.json({ ok: true });
+};
+
+exports.quitUser = async (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('http://localhost:3000/home');
+    });
+}
