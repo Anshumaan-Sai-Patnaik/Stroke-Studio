@@ -156,6 +156,8 @@ document.getElementById('saveProfileBtn').addEventListener('click', async () => 
         if (res.ok && data.ok) {
             document.querySelector('.profile-name').textContent = username;
             document.querySelector('.nav-user-name strong').textContent = username;
+            document.querySelector('.signout-body strong').textContent = username;
+            document.querySelector('.danger-type-label strong').textContent = username;
             showEditFeedback('success', 'Profile updated successfully.');
         } else {
             showEditFeedback('error', data.message || 'Failed to save changes.');
@@ -169,17 +171,25 @@ document.getElementById('saveProfileBtn').addEventListener('click', async () => 
     }
 });
 
-document.getElementById('openDeleteAccount').addEventListener('click',  () => openModal('deleteAccountModal'));
+document.getElementById('openDeleteAccount').addEventListener('click',  () => {
+    resetDeleteModal();
+    openModal('deleteAccountModal');
+});
 document.getElementById('deleteAccountModal').addEventListener('click', e => {
     if (e.target === document.getElementById('deleteAccountModal')) closeModal('deleteAccountModal');
 });
 
-const USERNAME = document.querySelector('.profile-name').textContent;
+function resetDeleteModal() {
+    document.getElementById('deleteConfirmCheck').checked = false;
+    document.getElementById('deleteConfirmInput').value = '';
+    checkDeleteReady();
+}
 
 function checkDeleteReady() {
     const checked = document.getElementById('deleteConfirmCheck').checked;
     const typed   = document.getElementById('deleteConfirmInput').value.trim();
     const btn     = document.getElementById('confirmDeleteBtn');
+    const USERNAME = document.querySelector(".danger-type-label strong").textContent;
     btn.disabled  = !(checked && typed === USERNAME);
 }
 

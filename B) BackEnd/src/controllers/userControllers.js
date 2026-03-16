@@ -58,6 +58,7 @@ exports.updateUser = async (req, res) => {
     const updateFields = {
         username: req.body.username
     };
+    req.session.user.username = req.body.username;
     if (req.body.newPassword) {
         updateFields.password = req.body.newPassword;
         req.session.user.password = req.body.newPassword;
