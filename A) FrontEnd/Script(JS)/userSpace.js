@@ -1,8 +1,19 @@
+let toastTimer;
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+
 function openModal(id)  { document.getElementById(id).classList.add('open'); document.body.style.overflow = 'hidden'; }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); document.body.style.overflow = ''; }
 document.querySelectorAll('[data-close]').forEach(btn => {
     btn.addEventListener('click', () => closeModal(btn.dataset.close));
 });
+
 
 document.getElementById('openSignOutNav').addEventListener('click', () => openModal('signOutModal'));
 document.getElementById('openSignOutMobile').addEventListener('click', () => openModal('signOutModal'));
@@ -18,7 +29,6 @@ document.getElementById('openEditProfile').addEventListener('click', () => {
 document.getElementById('editProfileModal').addEventListener('click', e => {
     if (e.target === document.getElementById('editProfileModal')) closeModal('editProfileModal');
 });
-
 
 function showEditFeedback(type, msg) {
     const el = document.getElementById('editFeedback');
@@ -138,7 +148,7 @@ document.getElementById('saveProfileBtn').addEventListener('click', async () => 
         if (pwUnlocked && newPw) {
             payload.newPassword = newPw;
         }
-        const res = await fetch(`/user/${userInfo.userID}/update`, {
+        const res = await fetch(`/user/${userInfo.userID}/update-profile`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -159,6 +169,7 @@ document.getElementById('saveProfileBtn').addEventListener('click', async () => 
             document.querySelector('.signout-body strong').textContent = username;
             document.querySelector('.danger-type-label strong').textContent = username;
             showEditFeedback('success', 'Profile updated successfully.');
+            showToast('Profile saved');
         } else {
             showEditFeedback('error', data.message || 'Failed to save changes.');
         }
@@ -170,6 +181,7 @@ document.getElementById('saveProfileBtn').addEventListener('click', async () => 
         btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Changes';
     }
 });
+
 
 document.getElementById('openDeleteAccount').addEventListener('click',  () => {
     resetDeleteModal();
@@ -221,5 +233,204 @@ document.getElementById('confirmDeleteBtn').addEventListener('click', async () =
         document.getElementById('cancelDelete').style.display = '';
         btn.disabled = false;
         btn.innerHTML = '<i class="fa-solid fa-trash-can"></i> Delete My Account';
+        showToast('Network error — could not delete account');
     }
+});
+
+
+const WORKS_MAP = {};
+ALL_WORKS.forEach(p => {
+    p._id = String(p._id);
+    WORKS_MAP[p._id] = p;
+});
+let cart = CART_IDS.map(id => WORKS_MAP[id]).filter(Boolean);
+let wishlist = WISH_IDS.map(id => WORKS_MAP[id]).filter(Boolean);
+const purchased = PURCHASED_IDS.map(id => WORKS_MAP[id]).filter(Boolean);
+
+function calcCartTotal() {
+    return cart.reduce((sum, p) => {
+        const price = Number(p.price.replace(/[^\d.]/g, ""));
+        return sum + price;
+    }, 0);
+}
+function renderCartSummary() {
+    const total = calcCartTotal().toLocaleString('en-IN');
+    document.getElementById('cartTotal').textContent = total;
+    document.getElementById('cartItemCount').textContent  = cart.length;
+    document.getElementById("cartItemLabel").textContent = cart.length === 1 ? "item" : "items";
+    document.getElementById('cartBadge').textContent = cart.length;
+    document.getElementById('cartBadgeMobile').textContent = cart.length;
+
+    const btn = document.getElementById('checkoutBtn');
+    if (cart.length > 0) {
+        btn.classList.remove('empty');
+    } else {
+        btn.classList.add('empty');
+    }
+}
+function renderStabCount() {
+    document.getElementById('sideCartCount').textContent  = cart.length;
+    document.getElementById('sideWishCount').textContent  = wishlist.length;
+    document.getElementById('sidePurchasedCount').textContent = purchased.length;
+    document.getElementById('sideGalleryCount').textContent   = ALL_WORKS.length;
+}
+
+function switchTab(targetId) {
+    document.querySelectorAll('.stab').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelector(`.stab[data-target="${targetId}"]`).classList.add('active');
+    document.getElementById(targetId).classList.add('active');
+}
+
+document.querySelectorAll('.stab').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.target));
+});
+
+document.getElementById('navCartBtn').addEventListener('click', () => switchTab('panel-cart'));
+document.getElementById('mobileCartToggle').addEventListener('click', () => switchTab('panel-cart'));
+
+
+function buildRow(painting, mode) {
+    const row = document.createElement('div');
+    row.className = 'painting-row';
+
+    const mediumText = painting.medium;
+    const styleText  = (painting.style === "Unknown") ? '' : painting.style;
+    const yearText   = painting.year;
+
+    let actionHTML = '';
+    if (mode === 'cart') {
+        actionHTML = `
+            <div class="painting-row-price">${painting.price}</div>
+            <div class="painting-row-btns">
+                <button class="row-btn wishlist-add" title="Move to Wishlist" data-action="cart-to-wish" data-id="${painting._id}">
+                    <i class="fa-regular fa-heart"></i>
+                </button>
+                <button class="row-btn remove" title="Remove" data-action="cart-remove" data-id="${painting._id}">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        `;
+    } else if (mode === 'wish') {
+        actionHTML = `
+            <div class="painting-row-price">${painting.price}</div>
+            <div class="painting-row-btns">
+                <button class="row-btn" title="Add to Cart" data-action="wish-to-cart" data-id="${painting._id}">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                </button>
+                <button class="row-btn remove" title="Remove" data-action="wish-remove" data-id="${painting._id}">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+        `;
+    } else if (mode === 'purchased') {
+        actionHTML = `
+            <div>
+                <div class="painting-row-price">${painting.price}</div>
+                <div style="margin-top:0.4rem;"><span class="purchased-badge"><i class="fa-solid fa-check" style="margin-right:0.3rem;"></i>Acquired</span></div>
+            </div>
+        `;
+    }
+
+    row.innerHTML = `
+        <div class="painting-row-thumb">
+            <img src="${'../' + painting.image.replace('A) FrontEnd/', '') + '.jpg'}" loading="lazy"/>
+        </div>
+        <div class="painting-row-info">
+            <div class="painting-row-title">${painting.title}</div>
+            <div class="painting-row-meta">
+                ${`<span>${painting.artist}</span> ·`}
+                ${mediumText} ${styleText ? '· ' + styleText : ''} ${'· ' + yearText}
+            </div>
+        </div>
+        <div class="painting-row-actions">${actionHTML}</div>
+    `;
+    return row;
+}
+
+function renderList(paintings, containerId, emptyId, metaId, mode) {
+    const containerEl = document.getElementById(containerId);
+    const emptyEl   = document.getElementById(emptyId);
+    const metaEl    = document.getElementById(metaId);
+
+    containerEl.innerHTML = '';
+    if (paintings.length === 0) {
+        emptyEl.style.display = 'flex';
+        metaEl.textContent = '';
+        return;
+    }
+    emptyEl.style.display = 'none';
+    metaEl.textContent = `${paintings.length} work${paintings.length > 1 ? 's' : ''}`;
+
+    paintings.forEach(p => containerEl.appendChild(buildRow(p, mode)));
+}
+
+function renderAll() {
+    renderList(cart, 'cartList', 'cartEmpty', 'cartHeaderMeta', 'cart');
+    renderList(wishlist, 'wishList', 'wishEmpty', 'wishHeaderMeta', 'wish');
+    renderList(purchased, 'purchasedList', 'purchasedEmpty', 'purchasedHeaderMeta', 'purchased');
+    renderCartSummary();
+    renderStabCount();
+}
+renderAll();
+
+
+function inCart(id)     { return cart.some(p => p._id === id); }
+function inWishlist(id) { return wishlist.some(p => p._id === id); }
+async function syncServer(action, paintingId) {
+    try {
+        await fetch(`/user/${userInfo.userID}/update-list`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action, paintingId
+            })
+        });
+    } catch (e) { }
+}
+
+function addToCart(painting) {
+    if (inCart(painting._id)) { showToast('Already in cart'); return; }
+    cart.push(painting);
+    syncServer('cart-add', painting._id);
+    showToast(`"${painting.title}" added to cart`);
+    renderAll();
+}
+function removeFromCart(id) {
+    cart = cart.filter(p => p._id !== id);
+    syncServer('cart-remove', id);
+    renderAll();
+}
+function addToWishlist(painting) {
+    if (inWishlist(painting._id)) { showToast('Already in wishlist'); return; }
+    wishlist.push(painting);
+    syncServer('wish-add', painting._id);
+    showToast(`"${painting.title}" saved to wishlist`);
+    renderAll();
+}
+function removeFromWishlist(id) {
+    wishlist = wishlist.filter(p => p._id !== id);
+    syncServer('wish-remove', id);
+    renderAll();
+}
+
+document.getElementById('cartList').addEventListener('click', e => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const id = btn.dataset.id;
+    const painting = cart.find(p => p._id === id);
+    if (!painting) return;
+
+    if (btn.dataset.action === 'cart-remove')  removeFromCart(id);
+    if (btn.dataset.action === 'cart-to-wish') { removeFromCart(id); addToWishlist(painting); }
+});
+document.getElementById('wishList').addEventListener('click', e => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const id = btn.dataset.id;
+    const painting = wishlist.find(p => p._id === id);
+    if (!painting) return;
+
+    if (btn.dataset.action === 'wish-remove')  removeFromWishlist(id);
+    if (btn.dataset.action === 'wish-to-cart') { removeFromWishlist(id); addToCart(painting); }
 });

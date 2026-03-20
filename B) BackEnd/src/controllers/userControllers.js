@@ -44,7 +44,7 @@ exports.getUser = async (req, res) => {
     }
 };
 
-exports.updateUser = async (req, res) => {
+exports.updateUserProfile = async (req, res) => {
     if (req.body.checkPassword) {
         if (req.body.checkPassword === req.session.user.password) 
             return res.json({ message: true });
@@ -69,6 +69,35 @@ exports.updateUser = async (req, res) => {
     );
     res.json({ ok: true });
 };
+exports.updateUserList = async (req, res) => {
+    let id = req.session.user.userID;
+    let { action, paintingId } = req.body;
+
+    if(action === 'cart-add') {
+        await User.updateOne(
+            { userID: id },
+            { $addToSet: { cartItems: paintingId } }
+        );
+    }
+    if(action === 'cart-remove') {
+        await User.updateOne(
+            { userID: id },
+            { $pull: { cartItems: paintingId } }
+        );
+    }
+    if(action === 'wish-add') {
+        await User.updateOne(
+            { userID: id },
+            { $addToSet: { wishList: paintingId } }
+        );
+    }
+    if(action === 'wish-remove') {
+        await User.updateOne(
+            { userID: id },
+            { $pull: { wishList: paintingId } }
+        );
+    }
+}
 
 exports.deleteUser = async (req, res) => {
     let id = req.session.user.userID;

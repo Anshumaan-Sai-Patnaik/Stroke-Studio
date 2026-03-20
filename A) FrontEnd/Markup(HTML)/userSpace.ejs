@@ -11,6 +11,11 @@
     <link rel="stylesheet" href="../Style(CSS)/userSpace.css">
 </head>
 <body>
+    <div class="toast" id="toast">
+        <i class="fa-solid fa-check"></i>
+        <span id="toastMsg">Done</span>
+    </div>
+    
     <div class="acct-backdrop" id="signOutModal" style="align-items:center; padding:1.5rem;">
         <div class="acct-modal" style="max-height:none; overflow-y:visible; align-self:auto;">
             <div class="acct-modal-header">
@@ -188,10 +193,161 @@
                     </button>
                 </div>
             </div>
+
+            <div class="sidebar-tabs">
+                <button class="stab active" data-target="panel-cart">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    My Cart
+                    <span class="stab-count" id="sideCartCount">0</span>
+                </button>
+                <button class="stab" data-target="panel-wish">
+                    <i class="fa-regular fa-heart"></i>
+                    Wishlist
+                    <span class="stab-count" id="sideWishCount">0</span>
+                </button>
+                <button class="stab" data-target="panel-purchased">
+                    <i class="fa-solid fa-box-archive"></i>
+                    Purchased
+                    <span class="stab-count" id="sidePurchasedCount">0</span>
+                </button>
+                <button class="stab" data-target="panel-gallery">
+                    <i class="fa-solid fa-palette"></i>
+                    Browse All Works
+                    <span class="stab-count" id="sideGalleryCount">0</span>
+                </button>
+            </div>
+
+            <div class="cart-summary">
+                <div class="cart-summary-label">Cart Total</div>
+                <div class="cart-summary-total">₹<span id="cartTotal">0</span></div>
+                <div class="cart-summary-meta"><span id="cartItemCount">0</span> <span id="cartItemLabel">items</span> selected</div>
+                <button class="btn-checkout empty" id="checkoutBtn">
+                    <i class="fa-solid fa-arrow-right"></i> Proceed to Checkout
+                </button>
+            </div>
         </aside>
+
+        <main class="main-content">
+            <div class="tab-panel active" id="panel-cart">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-eyebrow">
+                            <div class="panel-eyebrow-line"></div>
+                            <span>Your Collection</span>
+                        </div>
+                        <h2 class="panel-title">My <em>Cart</em></h2>
+                    </div>
+                    <div class="panel-meta" id="cartHeaderMeta"></div>
+                </div>
+
+                <div class="painting-list" id="cartList">
+                    <%
+                        // cartPaintings is populated server-side from cartItems ObjectIDs
+                    %>
+                </div>
+                <div class="empty-state" id="cartEmpty" style="display:none;">
+                    <div class="empty-state-icon"><i class="fa-solid fa-bag-shopping"></i></div>
+                    <h3>Your cart is empty</h3>
+                    <p>Browse the full collection and add works that speak to you.</p>
+                    <button class="empty-state-cta" data-target="panel-gallery">Explore Gallery</button>
+                </div>
+            </div>
+
+            <div class="tab-panel" id="panel-wish">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-eyebrow">
+                            <div class="panel-eyebrow-line"></div>
+                            <span>Saved for Later</span>
+                        </div>
+                        <h2 class="panel-title">My <em>Wishlist</em></h2>
+                    </div>
+                    <div class="panel-meta" id="wishHeaderMeta"></div>
+                </div>
+
+                <div class="painting-list" id="wishList">
+                    <%
+                        // wishList is populated server-side from wishList ObjectIDs
+                    %>
+                </div>
+                <div class="empty-state" id="wishEmpty" style="display:none;">
+                    <div class="empty-state-icon"><i class="fa-regular fa-heart"></i></div>
+                    <h3>Nothing saved yet</h3>
+                    <p>Heart paintings you love to revisit them here anytime.</p>
+                    <button class="empty-state-cta" data-target="panel-gallery">Explore Gallery</button>
+                </div>
+            </div>
+
+            <div class="tab-panel" id="panel-purchased">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-eyebrow">
+                            <div class="panel-eyebrow-line"></div>
+                            <span>Order History</span>
+                        </div>
+                        <h2 class="panel-title">My <em>Purchases</em></h2>
+                    </div>
+                    <div class="panel-meta" id="purchasedHeaderMeta"></div>
+                </div>
+
+                <div class="painting-list" id="purchasedList">
+                    <%
+                        // purchased is populated server-side from purchased ObjectIDs
+                    %>
+                </div>
+                <div class="empty-state" id="purchasedEmpty" style="display:none;">
+                    <div class="empty-state-icon"><i class="fa-solid fa-box-archive"></i></div>
+                    <h3>No purchases yet</h3>
+                    <p>Once you complete a checkout, your acquired works appear here.</p>
+                    <button class="empty-state-cta" data-target="panel-gallery">Start Collecting</button>
+                </div>
+            </div>
+
+            <div class="tab-panel" id="panel-gallery">
+                <div class="panel-header">
+                    <div>
+                        <div class="panel-eyebrow">
+                            <div class="panel-eyebrow-line"></div>
+                            <span>Full Collection</span>
+                        </div>
+                        <h2 class="panel-title">Browse <em>All Works</em></h2>
+                    </div>
+                </div>
+
+                <div class="gallery-search-bar">
+                    <div class="gsb-wrap">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="gallerySearchInput" placeholder="Search by title, artist, medium or style"/>
+                    </div>
+                    <div class="gsb-divider"></div>
+                    <button class="gsb-btn" id="gallerySearchBtn">
+                        <i class="fa-solid fa-arrow-right"></i> Search
+                    </button>
+                </div>
+                <div class="gallery-result-meta" id="galleryResultMeta"></div>
+
+                <div class="gallery-grid" id="galleryGrid">
+                    <%
+                        // gallery is populated server-side
+                    %>
+                </div>
+                <div class="empty-state" id="galleryEmpty" style="display:none;">
+                    <div class="empty-state-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+                    <h3>No results found</h3>
+                    <p>Try a different title, artist name, medium or style.</p>
+                    <button class="empty-state-cta" id="galleryClearSearch">Clear Search</button>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <script> const userInfo = <%- JSON.stringify(userInfo) %>; </script>
+    <script>
+        const userInfo = <%- JSON.stringify(userInfo) %>;
+        const ALL_WORKS = <%- JSON.stringify(allWorks) %>;
+        const CART_IDS = <%- JSON.stringify((userInfo.cartItems).map(id => String(id))) %>;
+        const WISH_IDS = <%- JSON.stringify((userInfo.wishList).map(id => String(id))) %>;
+        const PURCHASED_IDS = <%- JSON.stringify((userInfo.purchased).map(id => String(id))) %>;
+    </script>
     <script src="../Script(JS)/userSpace.js"></script>
 </body>
 </html>
