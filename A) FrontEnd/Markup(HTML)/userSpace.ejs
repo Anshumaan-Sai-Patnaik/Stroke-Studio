@@ -15,7 +15,7 @@
         <i class="fa-solid fa-check"></i>
         <span id="toastMsg">Done</span>
     </div>
-    
+
     <div class="acct-backdrop" id="signOutModal" style="align-items:center; padding:1.5rem;">
         <div class="acct-modal" style="max-height:none; overflow-y:visible; align-self:auto;">
             <div class="acct-modal-header">
@@ -148,6 +148,70 @@
                 <button class="acct-btn acct-btn-danger" id="confirmDeleteBtn" disabled>
                     <i class="fa-solid fa-trash-can"></i> Delete My Account
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="acct-backdrop cart-summary-modal-backdrop" id="cartSummaryModal" style="align-items:center; padding:1.5rem;">
+        <div class="acct-modal" style="max-height:none; overflow-y:visible; align-self:auto; min-width: 450px; max-width: 450px;">
+            <div class="acct-modal-header">
+                <div class="acct-modal-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+                <div class="acct-modal-title-wrap">
+                    <div class="acct-modal-eyebrow">Yay!</div>
+                    <div class="acct-modal-title">Cart <em style="font-style:italic;color:var(--gold);">Summary</em></div>
+                </div>
+                <button class="acct-close" data-close="cartSummaryModal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="acct-modal-body">
+                <div class="csm-label">Total</div>
+                <div class="csm-total">₹<span id="csmTotal">0</span></div>
+                <div class="csm-meta"><span id="csmItemCount">0</span> <span id="csmItemLabel">items</span> in cart</div>
+                <button class="csm-checkout empty" id="csmCheckoutBtn">
+                    <i class="fa-solid fa-arrow-right"></i> Proceed to Checkout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="detail-backdrop" id="detailModal">
+        <div class="detail-modal">
+            <button class="detail-close" id="closeDetail"><i class="fa-solid fa-xmark"></i></button>
+
+            <div class="detail-img-wrap">
+                <img id="detailImg" src=""/>
+                <div class="detail-img-badge" id="detailMediumBadge"></div>
+            </div>
+
+            <div class="detail-info">
+                <div>
+                    <div class="detail-eyebrow" id="detailStyle"></div>
+                    <h2 class="detail-title" id="detailTitle"></h2>
+                    <div class="detail-artist">By <span id="detailArtist"></span> &nbsp;·&nbsp; <span id="detailYear"></span></div>
+                    <div class="detail-meta">
+                        <div class="detail-meta-item">
+                            <div class="detail-meta-label">Medium</div>
+                            <div class="detail-meta-val" id="detailMetaMedium"></div>
+                        </div>
+                        <div class="detail-meta-item">
+                            <div class="detail-meta-label">Style</div>
+                            <div class="detail-meta-val" id="detailMetaStyle"></div>
+                        </div>
+                        <div class="detail-meta-item">
+                            <div class="detail-meta-label">Dimensions</div>
+                            <div class="detail-meta-val" id="detailMetaDimensions"></div>
+                        </div>
+                        <div class="detail-meta-item">
+                            <div class="detail-meta-label">Year</div>
+                            <div class="detail-meta-val" id="detailMetaYear"></div>
+                        </div>
+                    </div>
+                    <div class="detail-price">
+                        <sub>₹ </sub><span id="detailPrice"></span>
+                    </div>
+                </div>
+                <div class="detail-actions">
+
+                </div>
             </div>
         </div>
     </div>
@@ -324,18 +388,40 @@
                         <i class="fa-solid fa-arrow-right"></i> Search
                     </button>
                 </div>
-                <div class="gallery-result-meta" id="galleryResultMeta"></div>
+                <div class="gallery-result-meta" id="galleryResultMeta"><%=allWorks.length%> Works in Collection</div>
 
-                <div class="gallery-grid" id="galleryGrid">
-                    <%
-                        // gallery is populated server-side
-                    %>
+                <div class="gallery-wrapper">
+                    <div class="masonry-grid" id="masonryGrid">
+                        <% for(let i = 0; i < allWorks.length; i++) { %>
+                        <div
+                            class="gallery-item"
+                            data-index="<%= i %>"
+                            data-id="<%= allWorks[i]._id %>"
+                            data-title="<%= allWorks[i].title %>"
+                            data-artist="<%= allWorks[i].artist || 'Unknown Artist' %>"
+                            data-year="<%= allWorks[i].year || '' %>"
+                            data-medium="<%= allWorks[i].medium %>"
+                            data-style="<%= allWorks[i].style || '' %>"
+                            data-dimensions="<%= allWorks[i].dimensions %>"
+                            data-price="<%= allWorks[i].price %>"
+                            data-img="../<%= allWorks[i].image.replace('A) FrontEnd/', '') %>.jpg"
+                        >
+                            <img src="../<%= allWorks[i].image.replace('A) FrontEnd/', '') %>.jpg" loading="lazy"/>
+                            <div class="gallery-item-eye"><i class="fa-solid fa-eye"></i></div>
+                            <div class="gallery-item-info" data-id="<%= allWorks[i]._id %>">
+                                <div class="gallery-item-title"><%= allWorks[i].title %></div>
+                                <div class="gallery-item-details"><%= allWorks[i].medium %> · <span class="dimensions"><%= allWorks[i].dimensions %></span></div>
+                                <div class="gallery-item-price"><%= allWorks[i].price %></div>
+                            </div>
+                        </div>
+                        <% } %>
+                    </div>
                 </div>
+
                 <div class="empty-state" id="galleryEmpty" style="display:none;">
                     <div class="empty-state-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
                     <h3>No results found</h3>
                     <p>Try a different title, artist name, medium or style.</p>
-                    <button class="empty-state-cta" id="galleryClearSearch">Clear Search</button>
                 </div>
             </div>
         </main>

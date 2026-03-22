@@ -11,7 +11,9 @@ exports.runUser = async (req, res) => {
         });
     }
     else {
-        req.session.user = user;
+        req.session.user = {
+            userID: user.userID
+        };
         return res.json({
             success: true,
             user: user
@@ -32,8 +34,9 @@ exports.getUser = async (req, res) => {
         res.redirect('http://localhost:3000/home');
     }
     else{
-        delete user.password;
-        const data_ = user;
+        const userData = await User.findOne({ userID: req.session.user.userID });
+        delete userData.password;
+        const data_ = userData;
         const data = await Painting.aggregate([
             { $sample: { size: 99 } }
         ]);
@@ -46,22 +49,20 @@ exports.getUser = async (req, res) => {
 
 exports.updateUserProfile = async (req, res) => {
     if (req.body.checkPassword) {
-        if (req.body.checkPassword === req.session.user.password) 
+        let user = await User.findOne({ userID: req.session.user.userID });
+        if (req.body.checkPassword === user.password) 
             return res.json({ message: true });
         else {
             return res.json({ message: false });
         }
-
     }
 
     let id = req.session.user.userID;
     const updateFields = {
         username: req.body.username
     };
-    req.session.user.username = req.body.username;
     if (req.body.newPassword) {
         updateFields.password = req.body.newPassword;
-        req.session.user.password = req.body.newPassword;
     }
     await User.updateOne(
         { userID: id },
@@ -97,6 +98,7 @@ exports.updateUserList = async (req, res) => {
             { $pull: { wishList: paintingId } }
         );
     }
+    res.json({ ok: true });
 }
 
 exports.deleteUser = async (req, res) => {

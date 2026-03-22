@@ -83,7 +83,7 @@ async function verifyCurrentPassword() {
         return;
     }
 
-    const res = await fetch(`/user/${userInfo.userID}/update`, {
+    const res = await fetch(`/user/${userInfo.userID}/update-profile`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
@@ -260,12 +260,18 @@ function renderCartSummary() {
     document.getElementById("cartItemLabel").textContent = cart.length === 1 ? "item" : "items";
     document.getElementById('cartBadge').textContent = cart.length;
     document.getElementById('cartBadgeMobile').textContent = cart.length;
+    document.getElementById('csmTotal').textContent = total;
+    document.getElementById('csmItemCount').textContent  = cart.length;
+    document.getElementById("csmItemLabel").textContent = cart.length === 1 ? "item" : "items";
 
-    const btn = document.getElementById('checkoutBtn');
+    const btn1 = document.getElementById('checkoutBtn');
+    const btn2 = document.getElementById('csmCheckoutBtn');
     if (cart.length > 0) {
-        btn.classList.remove('empty');
+        btn1.classList.remove('empty');
+        btn2.classList.remove('empty');
     } else {
-        btn.classList.add('empty');
+        btn1.classList.add('empty');
+        btn2.classList.add('empty');
     }
 }
 function renderStabCount() {
@@ -287,7 +293,7 @@ document.querySelectorAll('.stab').forEach(btn => {
 });
 
 document.getElementById('navCartBtn').addEventListener('click', () => switchTab('panel-cart'));
-document.getElementById('mobileCartToggle').addEventListener('click', () => switchTab('panel-cart'));
+document.getElementById('mobileCartToggle').addEventListener('click', () => { switchTab('panel-cart'); openModal('cartSummaryModal'); });
 
 
 function buildRow(painting, mode) {
@@ -371,6 +377,7 @@ function renderAll() {
     renderList(purchased, 'purchasedList', 'purchasedEmpty', 'purchasedHeaderMeta', 'purchased');
     renderCartSummary();
     renderStabCount();
+    renderGallery();
 }
 renderAll();
 
@@ -434,3 +441,176 @@ document.getElementById('wishList').addEventListener('click', e => {
     if (btn.dataset.action === 'wish-remove')  removeFromWishlist(id);
     if (btn.dataset.action === 'wish-to-cart') { removeFromWishlist(id); addToCart(painting); }
 });
+
+
+function renderGallery() {
+    document.querySelectorAll('.gallery-item-info').forEach(parent => {
+        const existing = parent.querySelector('.gallery-item-btns');
+        if (existing) existing.remove();
+        const div = document.createElement('div');
+        div.className = 'gallery-item-btns';
+        const id = String(parent.dataset.id);
+
+        const isCart = inCart(id);
+        const isWish = inWishlist(id);
+        div.innerHTML = `
+            <button class="gallery-btn ${isCart ? 'in-cart' : ''}" data-action="g-cart" data-id="${id}">
+                <i class="fa-solid fa-bag-shopping"></i>
+                ${isCart ? 'In Cart' : 'Add to Cart'}
+            </button>
+            <button class="gallery-btn ${isWish ? 'in-wish' : ''}" data-action="g-wish" data-id="${id}">
+                <i class="${isWish ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+                ${isWish ? 'Saved' : 'Wishlist'}
+            </button>
+        `;
+        parent.appendChild(div);
+    });
+}
+renderGallery();
+
+const allItems = Array.from(document.querySelectorAll('.gallery-item'));
+let searchQuery = '';
+
+function matchesSearch(item) {
+    if (!searchQuery) return true;
+    const text = [
+        item.dataset.title,
+        item.dataset.artist,
+        item.dataset.medium,
+        item.dataset.style
+    ].join(' ').toLowerCase();
+    return text.includes(searchQuery);
+}
+function applySearchAndReset() {
+    allItems.forEach(item => {
+        if (matchesSearch(item)) {
+            item.classList.remove('hidden');
+        } else {
+            item.classList.add('hidden');
+        }
+    });
+    const total = allItems.filter(i => matchesSearch(i)).length;
+    if (total === allItems.length) document.getElementById('galleryResultMeta').textContent = `${total} Works in Collection`;
+    else document.getElementById('galleryResultMeta').textContent = `${total} Result${total === 1 ? '' : 's'} for "${searchQuery}"`;
+    
+    if (total === 0) document.getElementById('galleryEmpty').style.display = 'flex';
+    else document.getElementById('galleryEmpty').style.display = 'none';
+}
+function doSearch() {
+    searchQuery = document.getElementById('gallerySearchInput').value.trim().toLowerCase();
+    applySearchAndReset();
+}
+
+document.getElementById('gallerySearchBtn').addEventListener('click', doSearch);
+document.getElementById('gallerySearchInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doSearch();
+});
+
+document.getElementById('gallerySearchInput').addEventListener('input', function() {
+    if (this.value === '') {
+        searchQuery = '';
+        applySearchAndReset();
+    }
+});
+
+document.getElementById('masonryGrid').addEventListener('click', e => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const id = btn.dataset.id;
+    const painting = ALL_WORKS.find(p => String(p._id) === id);
+    if (!painting) return;
+
+    if (btn.dataset.action === 'g-cart') {
+        if (inCart(id)) { showToast('Already in cart'); }
+        else { addToCart(painting); }
+    }
+    if (btn.dataset.action === 'g-wish') {
+        if (inWishlist(id)) { showToast('Already in wishlist'); }
+        else { addToWishlist(painting); }
+    }
+});
+
+const detailBackdrop = document.getElementById('detailModal');
+const detailClose = document.getElementById('closeDetail');
+
+document.querySelectorAll('.gallery-item').forEach(item => {
+    item.addEventListener('click', e => {
+        if (e.target.closest('[data-action]')) return;
+
+        const d = item.dataset;
+        document.getElementById('detailImg').src = d.img;
+        document.getElementById('detailTitle').textContent = d.title;
+        document.getElementById('detailArtist').textContent = d.artist;
+        document.getElementById('detailYear').textContent = d.year;
+        (d.style === "Unknown") ? document.getElementById('detailStyle').style.display = "none" : (document.getElementById('detailStyle').style.display = "", document.getElementById('detailStyle').textContent = d.style);
+        document.getElementById('detailMediumBadge').textContent = d.medium;
+        document.getElementById('detailMetaMedium').textContent = d.medium;
+        (d.style === "Unknown") ? document.getElementById('detailMetaStyle').textContent = "—" : (document.getElementById('detailMetaStyle').style.display = "", document.getElementById('detailMetaStyle').textContent = d.style);
+        document.getElementById('detailMetaDimensions').textContent = d.dimensions;
+        document.getElementById('detailMetaYear').textContent = d.year;
+        document.getElementById('detailPrice').textContent = d.price.replace('₹', '').trim();
+
+        let parent = document.querySelector('.detail-info');
+        const existing = parent.querySelector('.detail-actions');
+        if (existing) existing.remove();
+        const div = document.createElement('div');
+        div.className = 'detail-actions';
+        const id = String(d.id);
+
+        const isCart = inCart(id);
+        const isWish = inWishlist(id);
+        div.innerHTML = `
+            <button class="detail-btn detail-btn-primary ${isCart ? ' in-cart' : ''}" data-action="g-cart" data-id="${id}">
+                <i class="fa-solid fa-bag-shopping"></i>
+                ${isCart ? 'In Cart' : 'Add to Cart'}
+            </button>
+            <button class="detail-btn detail-btn-secondary ${isWish ? ' in-wish' : ''}" data-action="g-wish" data-id="${id}">
+                <i class="${isWish ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+                ${isWish ? 'Saved to Wishlist' : 'Save to Wishlist'}
+            </button>
+        `;
+        parent.appendChild(div);
+
+        detailBackdrop.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    });
+});
+
+document.querySelector('.detail-info').addEventListener('click', e => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const id = btn.dataset.id;
+    const painting = ALL_WORKS.find(p => String(p._id) === id);
+    if (!painting) return;
+
+    if (btn.dataset.action === 'g-cart') {
+        if (inCart(id)) { showToast('Already in cart'); }
+        else {
+            addToCart(painting);
+            btn.classList.add('in-cart');
+            btn.innerHTML = `
+                <i class="fa-solid fa-bag-shopping"></i>
+                In Cart
+            `;
+        }
+    }
+    if (btn.dataset.action === 'g-wish') {
+        if (inWishlist(id)) { showToast('Already in wishlist'); }
+        else {
+            addToWishlist(painting);
+            btn.classList.add('in-wish');
+            btn.innerHTML = `
+                <i class="fa-solid fa-heart"></i>
+                Saved to Wishlist
+            `;
+        }
+    }
+});
+
+function closeDetail() {
+    detailBackdrop.classList.remove('open');
+    document.body.style.overflow = '';
+};
+
+detailClose.addEventListener('click', closeDetail);
+detailBackdrop.addEventListener('click', e => { if (e.target === detailBackdrop) closeDetail(); });
