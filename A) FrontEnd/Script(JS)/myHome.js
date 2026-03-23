@@ -27,9 +27,9 @@ document.querySelectorAll('.modal-tab').forEach(tab => {
 });
 
 
-const form = document.getElementById("tab-signin");
+const form1 = document.getElementById("tab-signin");
 
-form.addEventListener("submit", async (e) => {
+form1.addEventListener("submit", async (e) => {
     e.preventDefault();
 
     const email = document.getElementById("email-signin").value;
@@ -50,4 +50,26 @@ form.addEventListener("submit", async (e) => {
     } else {
         window.location.href = `http://localhost:3000/user/${data.user.userID}`;
     }
+});
+
+const form2 = document.getElementById("tab-register");
+
+form2.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById("name-reg").value;
+    const email = document.getElementById("email-reg").value;
+    const password = document.getElementById("pass-reg").value;
+
+    const response = await fetch("http://localhost:3000/user/register", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name, email, password })
+    });
+
+    const data = await response.json();
+
+    if(data.success) window.location.href = `http://localhost:3000/user/${data.user.userID}`;
 });
