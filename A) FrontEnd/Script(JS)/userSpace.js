@@ -610,7 +610,40 @@ document.querySelector('.detail-info').addEventListener('click', e => {
 function closeDetail() {
     detailBackdrop.classList.remove('open');
     document.body.style.overflow = '';
+
+    const iterModal = document.querySelector('.detail-modal');
+    if (iterModal) {
+        iterModal.style.transform = '';
+        iterModal.style.transition = '';
+    }
 };
 
 detailClose.addEventListener('click', closeDetail);
 detailBackdrop.addEventListener('click', e => { if (e.target === detailBackdrop) closeDetail(); });
+
+const interactiveModal = document.querySelector('.detail-modal');
+
+document.addEventListener('mousemove', (e) => {
+    if (!detailBackdrop.classList.contains('open')) return;
+    if (window.innerWidth <= 930) return; // Disable on small screens
+
+    const rect = interactiveModal.getBoundingClientRect();
+    
+    // Check if mouse is hovering the modal
+    if (
+        e.clientX >= rect.left && e.clientX <= rect.right &&
+        e.clientY >= rect.top && e.clientY <= rect.bottom
+    ) {
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        const rotateX = ((e.clientY - centerY) / (rect.height / 2)) * -6;
+        const rotateY = ((e.clientX - centerX) / (rect.width / 2)) * 6;
+
+        interactiveModal.style.transition = 'transform 0.1s ease-out';
+        interactiveModal.style.transform = `perspective(1200px) translateY(0) scale(1) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    } else {
+        interactiveModal.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        interactiveModal.style.transform = '';
+    }
+});
