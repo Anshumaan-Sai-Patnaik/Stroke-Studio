@@ -3,6 +3,9 @@ const Painting = require('../models/list');
 
 const {faker} = require("@faker-js/faker");
 
+const cloudinary = require("../config/cloudinary");
+const fs = require("fs");
+
 exports.makeUser = async (req, res) => {
     let {name, email, password} = req.body;
     let userID = faker.string.uuid();
@@ -88,6 +91,9 @@ exports.updateUserProfile = async (req, res) => {
     if (req.body.newPassword) {
         updateFields.password = req.body.newPassword;
     }
+    if (req.body.image) {
+        updateFields.image = req.body.image;
+    }
     await User.updateOne(
         { userID: id },
         updateFields
@@ -132,3 +138,13 @@ exports.deleteUser = async (req, res) => {
         res.json({ ok: true });
     });
 }
+
+exports.avatarUpload = async (req, res) => {
+    try {
+        const result = await cloudinary.uploader.upload(req.file.path);
+        res.json({ imageUrl: result.secure_url });
+
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};

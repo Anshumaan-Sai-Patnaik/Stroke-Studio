@@ -53,8 +53,11 @@
             <div class="acct-modal-body">
                 <div class="acct-feedback" id="editFeedback"></div>
                 <div class="acct-avatar-row">
-                    <div class="acct-avatar-preview" id="editAvatarPreview">
-                        <img src="/<%= userInfo.image.replace('Uploads/', '') %>.jpg">
+                    <div class="acct-avatar-preview <%= userInfo.image !== 'Uploads/!NoProfilePic' ? 'has-image' : 'no-image' %>" id="editAvatarPreview">
+                        <img src="<%= userInfo.image === 'Uploads/!NoProfilePic' ? '/' + userInfo.image.replace('Uploads/', '') + '.jpg' : userInfo.image %>"/>
+                        <div class="avatar-delete-overlay" id="avatarDeleteOverlay">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </div>
                     </div>
                     <div class="acct-avatar-meta">
                         <div class="acct-avatar-name">Profile photo</div>
@@ -242,7 +245,7 @@
             <div class="profile-card">
                 <div class="profile-pic">
                     <div class="profile-avatar">
-                        <img src="/<%= userInfo.image.replace('Uploads/', '') %>.jpg">
+                        <img src="<%= userInfo.image === 'Uploads/!NoProfilePic' ? '/' + userInfo.image.replace('Uploads/', '') + '.jpg' : userInfo.image %>"/>
                     </div>
                 </div>
                 <div class="profile-name"><%= userInfo.username %></div>

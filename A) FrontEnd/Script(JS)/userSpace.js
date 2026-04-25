@@ -48,6 +48,7 @@ function setHint(id, msg, type) {
 }
 
 function resetEditModal() {
+    uploadedImageUrl = null;
     setPwSectionLocked(true);
     document.getElementById('editCurrentPw').value = '';
     document.getElementById('editCurrentPw').disabled = false;
@@ -67,8 +68,48 @@ function resetEditModal() {
     fb.className = 'acct-feedback';
     fb.innerHTML = '';
 
+    const hasImage = currentImageUrl !== 'Uploads/!NoProfilePic';
+    const avatarImg = document.querySelector("#editAvatarPreview img");
+    avatarImg.src = hasImage ? currentImageUrl : '/' + currentImageUrl.replace('Uploads/', '') + '.jpg';
     document.getElementById('editUsername').value = document.querySelector('.profile-name').textContent;
+    
+    document.getElementById('editAvatarPreview').classList.toggle('has-image', hasImage);
+    document.getElementById('editAvatarPreview').classList.toggle('no-image', !hasImage);
 }
+
+let currentImageUrl = document.querySelector("#editAvatarPreview img").src.includes('!NoProfilePic.jpg') ? 'Uploads/!NoProfilePic' : document.querySelector("#editAvatarPreview img").src;
+let uploadedImageUrl = null;
+document.getElementById("avatarFileInput").addEventListener("change", async function () {
+    const file = this.files[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+        const res = await fetch("/user/upload-avatar", {
+            method: "POST",
+            body: formData
+        });
+        const data = await res.json();
+
+        if (res.ok) {
+            uploadedImageUrl = data.imageUrl;
+            document.querySelector("#editAvatarPreview img").src = uploadedImageUrl;
+            document.getElementById('editAvatarPreview').classList.toggle('has-image', true);
+            document.getElementById('editAvatarPreview').classList.toggle('no-image', false);
+        } else {
+            console.error(data.message);
+        }
+    } catch (err) {
+        console.error("Upload failed", err);
+    }
+});
+document.querySelector("#avatarDeleteOverlay i").addEventListener('click', function () {
+    uploadedImageUrl = 'Uploads/!NoProfilePic';
+    document.querySelector("#editAvatarPreview img").src = '/' + 'Uploads/!NoProfilePic'.replace('Uploads/', '') + '.jpg'
+    document.getElementById('editAvatarPreview').classList.toggle('has-image', false);
+    document.getElementById('editAvatarPreview').classList.toggle('no-image', true);
+});
 function setPwSectionLocked(locked) {
     const section = document.getElementById('pwNewSection');
     section.classList.toggle('locked', locked);
@@ -148,6 +189,9 @@ document.getElementById('saveProfileBtn').addEventListener('click', async () => 
         if (pwUnlocked && newPw) {
             payload.newPassword = newPw;
         }
+        if (uploadedImageUrl) {
+            payload.image = uploadedImageUrl;
+        }
         const res = await fetch(`/user/${userInfo.userID}/update-profile`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
@@ -168,6 +212,14 @@ document.getElementById('saveProfileBtn').addEventListener('click', async () => 
             document.querySelector('.nav-user-name strong').textContent = username;
             document.querySelector('.signout-body strong').textContent = username;
             document.querySelector('.danger-type-label strong').textContent = username;
+            
+            const avatarImg = document.querySelector(".profile-avatar img");
+            if (uploadedImageUrl) {
+                avatarImg.src = uploadedImageUrl === 'Uploads/!NoProfilePic' ? '/' + uploadedImageUrl.replace('Uploads/', '') + '.jpg' : uploadedImageUrl;
+                currentImageUrl = uploadedImageUrl;
+                uploadedImageUrl = null;
+            }
+
             showEditFeedback('success', 'Profile updated successfully.');
             showToast('Profile saved');
         } else {

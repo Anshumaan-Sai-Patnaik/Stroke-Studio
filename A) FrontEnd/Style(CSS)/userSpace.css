@@ -1267,6 +1267,8 @@ nav {
     overflow: hidden; 
     color: rgba(244,212,138,0.3);
     font-size: 1.4rem;
+    position: relative;
+    cursor: pointer;
 }
 
 .acct-avatar-preview img {
@@ -1274,6 +1276,45 @@ nav {
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.acct-avatar-preview.no-image .avatar-delete-overlay {
+    display: none;
+}
+
+.acct-avatar-preview.has-image .avatar-delete-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 20, 30, 0.75);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.acct-avatar-preview.has-image .avatar-delete-overlay i {
+    font-size: 1.1rem;
+    color: #fff;
+    transform: translateY(6px) scale(0.8);
+    opacity: 0;
+    transition: transform 0.3s ease 0.05s, opacity 0.3s ease 0.05s;
+    filter: drop-shadow(0 1px 4px rgba(0,0,0,0.5));
+}
+
+.acct-avatar-preview.has-image:hover img {
+    filter: brightness(0.35) saturate(0.2);
+    transform: scale(1.06);
+}
+
+.acct-avatar-preview.has-image:hover .avatar-delete-overlay {
+    opacity: 1;
+}
+
+.acct-avatar-preview.has-image:hover .avatar-delete-overlay i {
+    transform: translateY(0) scale(1);
+    opacity: 1;
 }
 
 .acct-avatar-meta {
