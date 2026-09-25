@@ -13,6 +13,6 @@ exports.getHome = async (req, res) => {
     }
     else{
         userID = req.session.user.userID
-        res.redirect(`http://localhost:3000/user/${userID}`);
+        res.redirect(`/user/${userID}`);
     }
 };

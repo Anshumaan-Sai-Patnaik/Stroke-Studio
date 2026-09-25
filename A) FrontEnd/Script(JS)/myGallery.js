@@ -224,7 +224,7 @@ form.addEventListener("submit", async (e) => {
     const email = document.getElementById("email-signin").value;
     const password = document.getElementById("pass-signin").value;
 
-    const response = await fetch("http://localhost:3000/user/signin", {
+    const response = await fetch("/user/signin", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -237,6 +237,6 @@ form.addEventListener("submit", async (e) => {
     if (!data.success) {
         document.getElementById("login-error").innerText = data.message;
     } else {
-        window.location.href = `http://localhost:3000/user/${data.user.userID}`;
+        window.location.href = `/user/${data.user.userID}`;
     }
 });

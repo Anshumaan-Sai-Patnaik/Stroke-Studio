@@ -280,7 +280,7 @@ document.getElementById('confirmDeleteBtn').addEventListener('click', async () =
             await delay;
         }
 
-        if (res.ok) window.location.href = 'http://localhost:3000/home';
+        if (res.ok) window.location.href = '/home';
     } catch (err) {
         document.getElementById('cancelDelete').style.display = '';
         btn.disabled = false;

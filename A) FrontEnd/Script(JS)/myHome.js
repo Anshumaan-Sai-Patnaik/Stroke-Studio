@@ -35,7 +35,7 @@ form1.addEventListener("submit", async (e) => {
     const email = document.getElementById("email-signin").value;
     const password = document.getElementById("pass-signin").value;
 
-    const response = await fetch("http://localhost:3000/user/signin", {
+    const response = await fetch("/user/signin", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -48,7 +48,7 @@ form1.addEventListener("submit", async (e) => {
     if (!data.success) {
         document.getElementById("login-error").innerText = data.message;
     } else {
-        window.location.href = `http://localhost:3000/user/${data.user.userID}`;
+        window.location.href = `/user/${data.user.userID}`;
     }
 });
 
@@ -61,7 +61,7 @@ form2.addEventListener("submit", async (e) => {
     const email = document.getElementById("email-reg").value;
     const password = document.getElementById("pass-reg").value;
 
-    const response = await fetch("http://localhost:3000/user/register", {
+    const response = await fetch("/user/register", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -71,5 +71,5 @@ form2.addEventListener("submit", async (e) => {
 
     const data = await response.json();
 
-    if(data.success) window.location.href = `http://localhost:3000/user/${data.user.userID}`;
+    if(data.success) window.location.href = `/user/${data.user.userID}`;
 });

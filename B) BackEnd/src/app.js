@@ -18,6 +18,10 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+
+app.get('/', (req, res) => {
+    res.redirect(`/home`);
+});
 app.use('/', require('./routes'));
 
 module.exports = app;

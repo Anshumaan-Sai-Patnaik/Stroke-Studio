@@ -11,6 +11,6 @@ exports.getGallery = async (req, res) => {
     }
     else{
         user = req.session.user
-        res.redirect(`http://localhost:3000/user/${user.userID}`);
+        res.redirect(`/user/${user.userID}`);
     }
 };

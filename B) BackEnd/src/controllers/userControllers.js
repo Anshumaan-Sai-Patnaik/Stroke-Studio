@@ -53,7 +53,7 @@ exports.runUser = async (req, res) => {
 
 exports.quitUser = async (req, res) => {
     req.session.destroy(() => {
-        res.redirect('http://localhost:3000/home');
+        res.redirect('/home');
     });
 }
 
@@ -61,7 +61,7 @@ exports.getUser = async (req, res) => {
     let {id} = req.params;
     let user = { ...req.session.user };
     if(!user || user.userID != id) {
-        res.redirect('http://localhost:3000/home');
+        res.redirect('/home');
     }
     else{
         const userData = await User.findOne({ userID: req.session.user.userID });
