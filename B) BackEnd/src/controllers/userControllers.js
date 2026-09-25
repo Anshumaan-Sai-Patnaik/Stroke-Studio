@@ -5,16 +5,18 @@ const {faker} = require("@faker-js/faker");
 
 const cloudinary = require("../config/cloudinary");
 const fs = require("fs");
+const crypto = require("crypto");
 
 exports.makeUser = async (req, res) => {
     let {name, email, password} = req.body;
     let userID = faker.string.uuid();
+    let hashedPassword = crypto.createHash('sha256').update(password).digest('hex');
     try{
         const user = await User.create({
             username: name,
             userID : userID,
             emailID: email,
-            password: password
+            password: hashedPassword
         });
         if (user) {
             req.session.user = {
@@ -30,7 +32,8 @@ exports.makeUser = async (req, res) => {
 
 exports.runUser = async (req, res) => {
     let {email, password} = req.body;
-    const user = await User.findOne({ emailID: email, password: password });
+    let hashedPassword = crypto.createHash('sha256').update(password).digest('hex');
+    const user = await User.findOne({ emailID: email, password: hashedPassword });
     if (!user) {
         return res.json({
             success: false,
@@ -77,7 +80,8 @@ exports.getUser = async (req, res) => {
 exports.updateUserProfile = async (req, res) => {
     if (req.body.checkPassword) {
         let user = await User.findOne({ userID: req.session.user.userID });
-        if (req.body.checkPassword === user.password) 
+        let hashedCheckPassword = crypto.createHash('sha256').update(req.body.checkPassword).digest('hex');
+        if (hashedCheckPassword === user.password) 
             return res.json({ message: true });
         else {
             return res.json({ message: false });
@@ -89,7 +93,7 @@ exports.updateUserProfile = async (req, res) => {
         username: req.body.username
     };
     if (req.body.newPassword) {
-        updateFields.password = req.body.newPassword;
+        updateFields.password = crypto.createHash('sha256').update(req.body.newPassword).digest('hex');
     }
     if (req.body.image) {
         updateFields.image = req.body.image;

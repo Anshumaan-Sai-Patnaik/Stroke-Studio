@@ -4,6 +4,7 @@ const User = require("../models/user");
 const Painting = require('../models/list');
 
 const {faker} = require("@faker-js/faker");
+const crypto = require("crypto");
 
 async function getCartItems() {
     let cartItemsCount = Math.floor(Math.random() * 4);
@@ -43,11 +44,14 @@ async function getRandomUser() {
     const wishList = await getWishList();
     const purchased = await getPurchased();
 
+    let rawPassword = "12345678";
+    let hashedPassword = crypto.createHash('sha256').update(rawPassword).digest('hex');
+
     return {
         userID: faker.string.uuid(),
         username: faker.internet.username(),
         emailID: faker.internet.email(),
-        password: faker.internet.password(),
+        password: hashedPassword,
         cartItems,
         wishList,
         purchased
