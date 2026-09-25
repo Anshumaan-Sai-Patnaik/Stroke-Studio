@@ -1,5 +1,7 @@
 # 🎨 Stroke Studio
 
+[![Live Demo](https://img.shields.io/badge/Live-Demo-F4D48A.svg)](https://stroke-studio.onrender.com/)
+
 Stroke Studio is a full-stack web application that serves as an online **art gallery and marketplace**. Users can explore paintings, manage their personal collections, and purchase artworks.
 
 ---
@@ -150,7 +152,6 @@ API_SECRET=your_api_secret
 
 * Payment Gateway Integration
 * Admin Panel for managing artworks
-* Deployment (Render / Vercel / AWS)
 
 ---
 
